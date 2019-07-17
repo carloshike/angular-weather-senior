@@ -10,10 +10,32 @@
 
   <mat-form-field>
     <input type="text" matInput placeholder="Cidade" [matAutocomplete]="auto" formControlName='cityInput'>
-    <mat-autocomplete #auto="matAutocomplete">
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectCity($event.option.value)">
       <mat-option *ngFor="let city of cities" [value]="city.cidade">
         {{city.cidade}}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>  
 </form>
+
+<div *ngIf="this.showResult">
+  <mat-tab-group>
+    <mat-tab *ngFor="let forecast of this.forecasts">
+      <ng-template mat-tab-label>
+          <div>
+            <p>{{forecast.date}}</p>
+          </div>  
+          <div>
+            <img src="{{forecast.weatherIcon}}">
+          </div>
+          <div>
+            <p>{{forecast.maxTemperature}}</p>
+          </div>     
+          <div>
+            <p>{{forecast.minTemperature}}</p>
+          </div>                      
+      </ng-template>
+      Content
+    </mat-tab>
+  </mat-tab-group>
+</div> 

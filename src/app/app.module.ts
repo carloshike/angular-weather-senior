@@ -13,6 +13,8 @@ import {MatButtonModule, MatCheckboxModule} from '@angular/material';
 import {MatSelectModule} from '@angular/material/select';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatFormFieldModule, MatInputModule, MatProgressSpinnerModule} from '@angular/material';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatIconModule} from '@angular/material/icon';
 import 'hammerjs';
 
 @NgModule({
@@ -32,7 +34,9 @@ import 'hammerjs';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTabsModule,
+    MatIconModule
   ],
   providers: [
     WeatherService,

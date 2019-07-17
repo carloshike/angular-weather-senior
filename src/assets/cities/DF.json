@@ -1,5 +1,3 @@
-{
-  "cidades": [
-    {"id": "DF", "cidade": "Brasília", "capital": true}
-  ]
-}
+[
+  {"id": "DF", "cidade": "Brasília", "capital": true}
+]

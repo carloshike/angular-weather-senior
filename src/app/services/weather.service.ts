@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
+import {Forecast, ForecastAdapter} from '../models/forecast.model';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class WeatherService {
@@ -8,14 +10,18 @@ export class WeatherService {
   baseUrl = 'https://api.worldweatheronline.com/premium/v1/weather.ashx?';
   apiKey = '07949ee74496483aa1003225191607';
 
-  constructor(public http: HttpClient) {
-  }
+  constructor(
+    private http: HttpClient,
+    private adapter: ForecastAdapter,
+    ) { }
 
-  getWeekForecast(state: string, city: string): Observable<any> {
+  getWeekForecast(city: string): Observable<Forecast[]> {
     return this.http.get(
       this.baseUrl + 'key=' + this.apiKey +
-      '&q=' + city.replace(' ', '+') + ',' + state.replace(' ', '+') +
-      '&num_of_days=7&tp=1&format=json'
+      '&q=' + city.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(' ', '+') + ', Brazil' +
+      '&num_of_days=7&tp=3&format=json'
+    ).pipe(
+      map((data: any) => data.data.weather.map(item => this.adapter.adapt(item)))
     );
   }
 
