@@ -20,7 +20,7 @@
 
 <div *ngIf="this.showResult">
   <mat-tab-group>
-    <mat-tab *ngFor="let forecast of this.forecasts">
+    <mat-tab *ngFor="let forecast of this.forecasts; index as i">
       <ng-template mat-tab-label>
           <div>
             <p>{{forecast.date}}</p>
@@ -35,7 +35,11 @@
             <p>{{forecast.minTemperature}}</p>
           </div>                      
       </ng-template>
-      Content
+      <ng-template>
+        <div>
+          <canvas id="canvas{{i}}" #canvas{{i}}>{{ this.dailyForecastCharts[i] }}</canvas>
+        </div>
+      </ng-template>
     </mat-tab>
   </mat-tab-group>
 </div> 

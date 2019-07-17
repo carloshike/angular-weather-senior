@@ -4,6 +4,7 @@ import { AddressService } from './services/address.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {switchMap} from 'rxjs/operators';
 import {Forecast} from './models/forecast.model';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ export class AppComponent implements OnInit {
   addressForm: FormGroup;
   selectedRegion: any;
   showResult;
+  dailyForecastCharts: [[[], [], [], [], [], [], []]];
 
   constructor(
     private weatherService: WeatherService,
@@ -51,9 +53,35 @@ export class AppComponent implements OnInit {
   onSelectCity(city) {
     this.weatherService.getWeekForecast(city)
         .subscribe(forecasts => {
-          console.log(forecasts);
           this.showResult = true;
           this.forecasts = forecasts;
+          setTimeout (() => {
+            this.createDailyForecastCharts();
+         }, 1000);
          });
+  }
+
+  createDailyForecastCharts() {
+    this.forecasts.forEach((forecast, i) => {
+      console.log(forecast);
+      this.dailyForecastCharts[i] = new Chart('canvas' + i, {
+        // The type of chart we want to create
+        type: 'line',
+
+        // The data for our dataset
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            datasets: [{
+                label: 'My First dataset',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: [0, 10, 5, 2, 20, 30, 45]
+            }]
+        },
+
+        // Configuration options go here
+        options: {}
+      });
+    });
   }
 }
