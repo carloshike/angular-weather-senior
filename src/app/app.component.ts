@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
   selectedRegion: any;
   showResult;
   dailyForecastCharts = [];
+  weekForecastChart = [];
   selectedTab: number;
 
   constructor(
@@ -39,9 +40,11 @@ export class AppComponent implements OnInit {
 
     this.addressForm.get('cityInput').valueChanges
     .pipe(
-      switchMap(value => this.addressService.searchCities(this.addressForm.value.region, {cityName: value}, 1))
+      switchMap(value => this.addressService.getCities(this.addressForm.value.region))
     )
-    .subscribe(data => this.cities = data);
+    .subscribe(data => {
+      this.cities = data.filter(city => city.cidade.toLowerCase().indexOf(this.addressForm.get('cityInput').value) !== -1);
+    });
   }
 
   onSelectRegion(regionId) {
@@ -59,6 +62,7 @@ export class AppComponent implements OnInit {
           this.forecasts = forecasts;
           console.log(forecasts);
           this.createDailyForecastCharts(0);
+          this.createWeekForecastCart(forecasts);
          });
   }
 
@@ -67,16 +71,16 @@ export class AppComponent implements OnInit {
   }
 
   createDailyForecastCharts(index) {
-    let forecast = this.forecasts[index];
-   
+    const forecast = this.forecasts[index];
+
     setTimeout (() => {
       this.createDailyChart(forecast, index);
     }, 300);
   }
 
-  createDailyChart(forecast, index) {   
-    this.dailyForecastCharts = []  
-    let htmlRef = document.querySelector('#forecastDailyChart' + index);
+  createDailyChart(forecast, index) {
+    this.dailyForecastCharts = [];
+    const htmlRef = document.querySelector('#forecastDailyChart' + index);
     this.dailyForecastCharts.push(new Chart( htmlRef, {
       type: 'line',
       data: {
@@ -92,5 +96,39 @@ export class AppComponent implements OnInit {
       options: {responsive: true,
         maintainAspectRatio: false}
     }));
-  }  
+  }
+
+  createWeekForecastCart(forecasts) {
+    const maxTemp = [];
+    const minTemp = [];
+    const dateLabels = []
+
+    forecasts.forEach(forecast => {
+      maxTemp.push(forecast.maxTemperature);
+      minTemp.push(forecast.minTemperature);
+      dateLabels.push(forecast.date);
+    });
+
+    const htmlRef = document.querySelector('#forecastWeekChart');
+    this.weekForecastChart = new Chart( htmlRef, {
+      type: 'line',
+      data: {
+          labels: dateLabels,
+          datasets: [{
+            label: 'temperatura máxima °C',
+            borderColor: 'red',
+            backgroundColor: 'transparent',
+            data: maxTemp
+          }, {
+            label: 'temperatura mínima °C',
+            borderColor: 'blue',
+            backgroundColor: 'transparent',
+            data: minTemp
+          }]
+      },
+
+      options: {responsive: true,
+        maintainAspectRatio: false}
+    });
+  }
 }
