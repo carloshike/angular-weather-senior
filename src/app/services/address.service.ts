@@ -22,6 +22,7 @@ export class AddressService {
   }
 
   searchCities(regionCode, filter: {cityName: string} = {cityName: ''}, page = 1): Observable<any> {
+    console.log(filter.cityName);
     return this.http.get(this.citiesUrl + regionCode + '.json')
     .pipe(
       tap(cities => {

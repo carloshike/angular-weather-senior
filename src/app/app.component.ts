@@ -18,7 +18,8 @@ export class AppComponent implements OnInit {
   addressForm: FormGroup;
   selectedRegion: any;
   showResult;
-  dailyForecastCharts: [[[], [], [], [], [], [], []]];
+  dailyForecastCharts = [];
+  selectedTab: number;
 
   constructor(
     private weatherService: WeatherService,
@@ -53,35 +54,43 @@ export class AppComponent implements OnInit {
   onSelectCity(city) {
     this.weatherService.getWeekForecast(city)
         .subscribe(forecasts => {
+          this.selectedTab = 0;
           this.showResult = true;
           this.forecasts = forecasts;
-          setTimeout (() => {
-            this.createDailyForecastCharts();
-         }, 1000);
+          console.log(forecasts);
+          this.createDailyForecastCharts(0);
          });
   }
 
-  createDailyForecastCharts() {
-    this.forecasts.forEach((forecast, i) => {
-      console.log(forecast);
-      this.dailyForecastCharts[i] = new Chart('canvas' + i, {
-        // The type of chart we want to create
-        type: 'line',
-
-        // The data for our dataset
-        data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [{
-                label: 'My First dataset',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: [0, 10, 5, 2, 20, 30, 45]
-            }]
-        },
-
-        // Configuration options go here
-        options: {}
-      });
-    });
+  tabChange(event: any): void {
+    this.createDailyForecastCharts(event.index);
   }
+
+  createDailyForecastCharts(index) {
+    let forecast = this.forecasts[index];
+   
+    setTimeout (() => {
+      this.createDailyChart(forecast, index);
+    }, 300);
+  }
+
+  createDailyChart(forecast, index) {   
+    this.dailyForecastCharts = []  
+    let htmlRef = document.querySelector('#forecastDailyChart' + index);
+    this.dailyForecastCharts.push(new Chart( htmlRef, {
+      type: 'line',
+      data: {
+          labels: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'],
+          datasets: [{
+              label: 'temperatura °C',
+              borderColor: 'blue',
+              backgroundColor: 'transparent',
+              data: forecast.hourlyTemperature
+          }]
+      },
+
+      options: {responsive: true,
+        maintainAspectRatio: false}
+    }));
+  }  
 }

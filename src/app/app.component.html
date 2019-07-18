@@ -19,7 +19,7 @@
 </form>
 
 <div *ngIf="this.showResult">
-  <mat-tab-group>
+  <mat-tab-group (selectedTabChange)="tabChange($event)" [(selectedIndex)]="this.selectedTab">
     <mat-tab *ngFor="let forecast of this.forecasts; index as i">
       <ng-template mat-tab-label>
           <div>
@@ -35,11 +35,12 @@
             <p>{{forecast.minTemperature}}</p>
           </div>                      
       </ng-template>
-      <ng-template>
-        <div>
-          <canvas id="canvas{{i}}" #canvas{{i}}>{{ this.dailyForecastCharts[i] }}</canvas>
+      <div>
+        <p>{{forecast.date}}</p>
+        <div style="height: 200px">
+          <canvas id="forecastDailyChart{{i}}" #forecastDailyChart{{i}}></canvas>
         </div>
-      </ng-template>
+      </div>
     </mat-tab>
   </mat-tab-group>
 </div> 

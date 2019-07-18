@@ -11,6 +11,7 @@ export class Forecast {
         public currentTemperature: string,
         public minTemperature: string,
         public maxTemperature: string,
+        public hourlyTemperature: Array<number>
     ) { }
 }
 
@@ -29,7 +30,8 @@ export class ForecastAdapter implements Adapter<Forecast> {
         'converter dia da semana',
         'pegar temperatura atual',
         item.mintempC,
-        item.maxtempC
+        item.maxtempC,
+        item.hourly.map(t => t.tempC)
       );
     }
   }
