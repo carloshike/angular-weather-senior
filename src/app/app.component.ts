@@ -21,6 +21,8 @@ export class AppComponent implements OnInit {
   dailyForecastCharts = [];
   weekForecastChart = [];
   selectedTab: number;
+  defaultRegion = 'SC';
+  defaultCity = 'Blumenau';
 
   constructor(
     private weatherService: WeatherService,
@@ -34,9 +36,11 @@ export class AppComponent implements OnInit {
     });
 
     this.addressForm = this.fb.group({
-      cityInput: null,
-      region: null
+      cityInput: this.defaultCity,
+      region: this.defaultRegion
     });
+
+    this.onSelectCity(this.addressForm.get('cityInput').value);
 
     this.addressForm.get('cityInput').valueChanges
     .pipe(
