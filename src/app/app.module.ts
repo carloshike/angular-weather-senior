@@ -15,6 +15,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatFormFieldModule, MatInputModule, MatProgressSpinnerModule} from '@angular/material';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatIconModule} from '@angular/material/icon';
+import { CookieService } from 'ngx-cookie-service';
 import 'hammerjs';
 
 @NgModule({
@@ -40,7 +41,8 @@ import 'hammerjs';
   ],
   providers: [
     WeatherService,
-    AddressService
+    AddressService,
+    CookieService
   ],
   bootstrap: [AppComponent]
 })

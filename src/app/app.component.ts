@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { WeatherService } from './services/weather.service';
 import { AddressService } from './services/address.service';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {switchMap} from 'rxjs/operators';
-import {Forecast} from './models/forecast.model';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { switchMap } from 'rxjs/operators';
+import { Forecast } from './models/forecast.model';
 import { Chart } from 'chart.js';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-root',
@@ -23,17 +24,26 @@ export class AppComponent implements OnInit {
   selectedTab: number;
   defaultRegion = 'SC';
   defaultCity = 'Blumenau';
+  favoriteAddressCookie: string;
 
   constructor(
     private weatherService: WeatherService,
     private addressService: AddressService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cookieService: CookieService
   ) { }
 
   ngOnInit() {
     this.addressService.getRegions().subscribe(data => {
       this.regions = data;
     });
+
+    this.favoriteAddressCookie = this.cookieService.get('favoriteAddress');
+
+    if (this.favoriteAddressCookie) {
+      this.defaultRegion = this.favoriteAddressCookie.split('1')[0];
+      this.defaultCity = this.favoriteAddressCookie.split('1')[1];
+    }
 
     this.addressForm = this.fb.group({
       cityInput: this.defaultCity,
@@ -47,8 +57,21 @@ export class AppComponent implements OnInit {
       switchMap(value => this.addressService.getCities(this.addressForm.value.region))
     )
     .subscribe(data => {
-      this.cities = data.filter(city => city.cidade.toLowerCase().indexOf(this.addressForm.get('cityInput').value) !== -1);
+      this.cities = data.filter(city => city.cidade.toLowerCase().indexOf(this.addressForm.get('cityInput').value.toLowerCase()) !== -1);
     });
+  }
+
+  toggleFavorite() {
+    const addressString = this.addressForm.get('region').value + '1' + this.addressForm.get('cityInput').value;
+
+    if (!this.favoriteAddressCookie || this.favoriteAddressCookie !== addressString) {
+      this.cookieService.set('favoriteAddress', addressString);
+      this.favoriteAddressCookie = addressString;
+    } else {
+      this.cookieService.delete('favoriteAddress');
+      this.favoriteAddressCookie = undefined;
+    }
+
   }
 
   onSelectRegion(regionId) {
@@ -105,7 +128,7 @@ export class AppComponent implements OnInit {
   createWeekForecastCart(forecasts) {
     const maxTemp = [];
     const minTemp = [];
-    const dateLabels = []
+    const dateLabels = [];
 
     forecasts.forEach(forecast => {
       maxTemp.push(forecast.maxTemperature);

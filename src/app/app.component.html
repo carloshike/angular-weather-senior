@@ -18,6 +18,11 @@
   </mat-form-field>  
 </form>
 
+<a (click)="this.toggleFavorite()">
+  <i class="material-icons" *ngIf="this.favoriteAddressCookie">star</i>
+  <i class="material-icons" *ngIf="!this.favoriteAddressCookie">star_border</i>
+</a>
+
 <div *ngIf="this.showResult">
   <mat-tab-group (selectedTabChange)="tabChange($event)" [(selectedIndex)]="this.selectedTab">
     <mat-tab *ngFor="let forecast of this.forecasts; index as i">
