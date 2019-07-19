@@ -23,38 +23,43 @@
   <i class="material-icons" *ngIf="!this.favoriteAddressCookie">star_border</i>
 </a>
 
-<div *ngIf="this.showResult">
-  <mat-tab-group (selectedTabChange)="tabChange($event)" [(selectedIndex)]="this.selectedTab">
-    <mat-tab *ngFor="let forecast of this.forecasts; index as i">
-      <ng-template mat-tab-label>
-          <div>
-            <p>{{forecast.date}}</p>
-          </div>  
-          <div>
-            <img src="{{forecast.weatherIcon}}">
+<div>
+  <div id="loader" [hidden]="!loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div *ngIf="this.showResult">
+    <mat-tab-group (selectedTabChange)="tabChange($event)" [(selectedIndex)]="this.selectedTab">
+      <mat-tab *ngFor="let forecast of this.forecasts; index as i">
+        <ng-template mat-tab-label>
+            <div>
+              <p>{{forecast.date}}</p>
+            </div>  
+            <div>
+              <img src="http://cdn.worldweatheronline.net/images/weather/small/{{forecast.weatherCode}}_day_sm.png">
+            </div>
+            <div>
+              <p>{{forecast.maxTemperature}}</p>
+            </div>     
+            <div>
+              <p>{{forecast.minTemperature}}</p>
+            </div>                      
+        </ng-template>
+        <div>
+          <p>{{forecast.date}}</p>
+          <div style="height: 200px">
+            <canvas id="forecastDailyChart{{i}}" #forecastDailyChart{{i}}></canvas>
           </div>
-          <div>
-            <p>{{forecast.maxTemperature}}</p>
-          </div>     
-          <div>
-            <p>{{forecast.minTemperature}}</p>
-          </div>                      
-      </ng-template>
-      <div>
-        <p>{{forecast.date}}</p>
-        <div style="height: 200px">
-          <canvas id="forecastDailyChart{{i}}" #forecastDailyChart{{i}}></canvas>
         </div>
-      </div>
 
-      <div *ngIf="this.placeList && this.placeList[i]">
-        <div *ngFor="let placeList of this.placeList[i]">
-            <p>{{placeList.title}}</p>
+        <div *ngIf="this.placeList && this.placeList[i]">
+          <div *ngFor="let placeList of this.placeList[i]">
+              <p>{{placeList.title}}</p>
+          </div>
         </div>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  <div style="height: 200px">
+    <canvas id="forecastWeekChart" #forecastWeekChart></canvas>
+  </div>
 </div>
-<div style="height: 200px">
-  <canvas id="forecastWeekChart" #forecastWeekChart></canvas>
-</div>  

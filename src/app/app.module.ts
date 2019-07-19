@@ -17,6 +17,7 @@ import { MatFormFieldModule, MatInputModule, MatProgressSpinnerModule } from '@a
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { CookieService } from 'ngx-cookie-service';
+import { DatePipe } from '@angular/common';
 import 'hammerjs';
 
 @NgModule({
@@ -44,7 +45,8 @@ import 'hammerjs';
     WeatherService,
     AddressService,
     CookieService,
-    PlaceService
+    PlaceService,
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })

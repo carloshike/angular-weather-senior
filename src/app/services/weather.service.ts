@@ -26,7 +26,14 @@ export class WeatherService {
       '&q=' + city.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(' ', '+') + ', Brazil' +
       '&num_of_days=7&tp=3&format=json'
     ).pipe(
-      map((data: any) => data.data.weather.map(item => this.adapter.adapt(item, forecastDefaults)))
+      map((data: any) => {
+        const tempC = data.data.current_condition[0].temp_C;
+        const feelsLike = data.data.current_condition[0].FeelsLikeC;
+        return data.data.weather.map(item =>
+          this.adapter.adapt(item, forecastDefaults, tempC, feelsLike)
+        );
+      }
+      )
     );
   }
 

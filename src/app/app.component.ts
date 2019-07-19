@@ -31,6 +31,7 @@ export class AppComponent implements OnInit {
   placeSuggestion: Array<any>;
   forecastDefaults: any;
   placeList: Array<Array<Place>> = [];
+  loading;
 
   constructor(
     private weatherService: WeatherService,
@@ -48,7 +49,7 @@ export class AppComponent implements OnInit {
 
     this.addressService.getRegions().subscribe(data => {
       this.regions = data;
-    });    
+    });
 
     this.favoriteAddressCookie = this.cookieService.get('favoriteAddress');
 
@@ -92,6 +93,7 @@ export class AppComponent implements OnInit {
   }
 
   onSelectCity(city) {
+    this.loading = true;
     this.weatherService.getWeekForecast(city, this.forecastDefaults)
         .subscribe(forecasts => {
           this.selectedTab = 0;
@@ -104,6 +106,7 @@ export class AppComponent implements OnInit {
   }
 
   loadPlacesSuggestion(forecasts) {
+    console.log(forecasts);
     this.weatherService.getForecastLocationInfo(this.addressForm.value.cityInput, this.addressForm.value.region)
     .subscribe((data: any[]) => {
       this.cityCoordinates = data[0].lat + ',' + data[0].lon;
@@ -112,13 +115,15 @@ export class AppComponent implements OnInit {
   }
 
   generatePlaceSuggestion(forecasts) {
-    forecasts.forEach(forecast => {
+    console.log(1, forecasts);
+    this.placeList = [];
+    forecasts.forEach((forecast, index) => {
       this.placeService.generatePlaceSuggestion(forecast, this.cityCoordinates).subscribe((data: Array<Place>) => {
-        console.log(1, this.placeList);
-        console.log(2, data);
-        this.placeList.push(data);
-      });      
-    });    
+        this.placeList[index] = data;
+        this.loading = false;
+      });
+      console.log(2, this.placeList);
+    });
   }
 
   tabChange(event: any): void {
