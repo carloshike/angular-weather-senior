@@ -11,7 +11,9 @@ export class Forecast {
         public currentTemperature: string,
         public minTemperature: string,
         public maxTemperature: string,
-        public hourlyTemperature: Array<number>
+        public hourlyTemperature: Array<number>,
+        public suggestActivityType: string,
+        public weatherTranslated: string
     ) { }
 }
 
@@ -21,7 +23,8 @@ export class Forecast {
 
 export class ForecastAdapter implements Adapter<Forecast> {
 
-    adapt(item: any): Forecast {
+    adapt(item: any, forecastDefaults: any): Forecast {
+      const forecastDefaultItem = forecastDefaults.map(df => df).filter(dfItem => dfItem.id.toString() === item.hourly[4].weatherCode)[0];
       return new Forecast(
         item.hourly[4].weatherCode,
         item.hourly[4].weatherDesc[0].value,
@@ -31,7 +34,9 @@ export class ForecastAdapter implements Adapter<Forecast> {
         'pegar temperatura atual',
         item.mintempC,
         item.maxtempC,
-        item.hourly.map(t => t.tempC)
+        item.hourly.map(t => t.tempC),
+        forecastDefaultItem.sugestActivity,
+        forecastDefaultItem.title
       );
     }
   }

@@ -16,22 +16,19 @@ export class PlaceService {
     private adapter: PlaceAdapter,
   ) { }
 
-  getOutdoorPlacesSuggestion(coordinates: string): Observable<Place[]> {
+  generatePlaceSuggestion(forecast, coordinates): Observable<Array<Place>> {
+    let activityType: string;
+    if (forecast.suggestActivityType === 'indoor') {
+      activityType = 'natural-geographical%2Cadministrative-areas-buildings';
+    } else {
+      activityType = 'natural-geographical%2Cadministrative-areas-buildings'
+    }
+
     return this.http.get(this.baseUrl + 'at=' + coordinates +
-    'cat=natural-geographical%2Cadministrative-areas-buildings&size=100&Accept-Language=pt-BR%3B&app_id=' +
+    '&cat=' + activityType + '&size=100&Accept-Language=pt-BR%3B&app_id=' +
     this.appId + '&app_code=' + this.appCode).pipe(
       map((data: any) => data.results.items.map(item => this.adapter.adapt(item)))
-    );
+    );    
   }
-
-  generatePlaceSuggestion(forecasts): Observable<Place[]> {
-    return null;
-  }
-
-  // getIndoorPlacesSuggestion(coordinates: string): Observable<Place[]> {
-  //   // return this.http.get(this.baseUrl + 'at=' + coordinates +
-  //   // 'cat=natural-geographical%2Cadministrative-areas-buildings&size=100&Accept-Language=pt-BR%3B&app_id=' +
-  //   // this.appId + '&app_code=' + this.appCode);
-  // }
 
 }

@@ -5,8 +5,9 @@ import { AddressService } from './services/address.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { switchMap } from 'rxjs/operators';
 import { Forecast } from './models/forecast.model';
+import { Place } from './models/place.model';
 import { Chart } from 'chart.js';
-import {CookieService} from 'ngx-cookie-service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,9 @@ export class AppComponent implements OnInit {
   defaultCity = 'Blumenau';
   favoriteAddressCookie: string;
   cityCoordinates: string;
+  placeSuggestion: Array<any>;
+  forecastDefaults: any;
+  placeList: Array<Array<Place>> = [];
 
   constructor(
     private weatherService: WeatherService,
@@ -37,9 +41,14 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.weatherService.getforecastDefaults().subscribe(data => {
+      this.forecastDefaults = data;
+      this.onSelectCity(this.addressForm.get('cityInput').value);
+    });
+
     this.addressService.getRegions().subscribe(data => {
       this.regions = data;
-    });
+    });    
 
     this.favoriteAddressCookie = this.cookieService.get('favoriteAddress');
 
@@ -52,8 +61,6 @@ export class AppComponent implements OnInit {
       cityInput: this.defaultCity,
       region: this.defaultRegion
     });
-
-    this.onSelectCity(this.addressForm.get('cityInput').value);
 
     this.addressForm.get('cityInput').valueChanges
     .pipe(
@@ -85,12 +92,11 @@ export class AppComponent implements OnInit {
   }
 
   onSelectCity(city) {
-    this.weatherService.getWeekForecast(city)
+    this.weatherService.getWeekForecast(city, this.forecastDefaults)
         .subscribe(forecasts => {
           this.selectedTab = 0;
           this.showResult = true;
           this.forecasts = forecasts;
-          console.log(forecasts);
           this.createDailyForecastCharts(0);
           this.createWeekForecastCart(forecasts);
           this.loadPlacesSuggestion(forecasts);
@@ -101,8 +107,18 @@ export class AppComponent implements OnInit {
     this.weatherService.getForecastLocationInfo(this.addressForm.value.cityInput, this.addressForm.value.region)
     .subscribe((data: any[]) => {
       this.cityCoordinates = data[0].lat + ',' + data[0].lon;
-      // this.placeService.generatePlaceSuggestion(); chama uma nova função e faz um loop nos forecasts
+      this.generatePlaceSuggestion(forecasts);
     });
+  }
+
+  generatePlaceSuggestion(forecasts) {
+    forecasts.forEach(forecast => {
+      this.placeService.generatePlaceSuggestion(forecast, this.cityCoordinates).subscribe((data: Array<Place>) => {
+        console.log(1, this.placeList);
+        console.log(2, data);
+        this.placeList.push(data);
+      });      
+    });    
   }
 
   tabChange(event: any): void {

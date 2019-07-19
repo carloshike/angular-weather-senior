@@ -9,19 +9,24 @@ export class WeatherService {
 
   baseUrl = 'https://api.worldweatheronline.com/premium/v1/';
   apiKey = '07949ee74496483aa1003225191607';
+  forecastJson = '../assets/weather.json';
 
   constructor(
     private http: HttpClient,
     private adapter: ForecastAdapter,
   ) { }
 
-  getWeekForecast(city: string): Observable<Forecast[]> {
+  getforecastDefaults() {
+    return this.http.get(this.forecastJson);
+  }
+
+  getWeekForecast(city: string, forecastDefaults: any): Observable<Forecast[]> {
     return this.http.get(
       this.baseUrl + 'weather.ashx?key=' + this.apiKey +
       '&q=' + city.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(' ', '+') + ', Brazil' +
       '&num_of_days=7&tp=3&format=json'
     ).pipe(
-      map((data: any) => data.data.weather.map(item => this.adapter.adapt(item)))
+      map((data: any) => data.data.weather.map(item => this.adapter.adapt(item, forecastDefaults)))
     );
   }
 

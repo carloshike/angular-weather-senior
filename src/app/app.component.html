@@ -46,6 +46,12 @@
           <canvas id="forecastDailyChart{{i}}" #forecastDailyChart{{i}}></canvas>
         </div>
       </div>
+
+      <div *ngIf="this.placeList && this.placeList[i]">
+        <div *ngFor="let placeList of this.placeList[i]">
+            <p>{{placeList.title}}</p>
+        </div>
+      </div>
     </mat-tab>
   </mat-tab-group>
 </div>
