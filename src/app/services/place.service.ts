@@ -24,6 +24,10 @@ export class PlaceService {
     );
   }
 
+  generatePlaceSuggestion(forecasts): Observable<Place[]> {
+    return null;
+  }
+
   // getIndoorPlacesSuggestion(coordinates: string): Observable<Place[]> {
   //   // return this.http.get(this.baseUrl + 'at=' + coordinates +
   //   // 'cat=natural-geographical%2Cadministrative-areas-buildings&size=100&Accept-Language=pt-BR%3B&app_id=' +

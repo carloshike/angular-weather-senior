@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WeatherService } from './services/weather.service';
+import { PlaceService } from './services/place.service';
 import { AddressService } from './services/address.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { switchMap } from 'rxjs/operators';
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private weatherService: WeatherService,
+    private placeService: PlaceService,
     private addressService: AddressService,
     private fb: FormBuilder,
     private cookieService: CookieService
@@ -99,6 +101,7 @@ export class AppComponent implements OnInit {
     this.weatherService.getForecastLocationInfo(this.addressForm.value.cityInput, this.addressForm.value.region)
     .subscribe((data: any[]) => {
       this.cityCoordinates = data[0].lat + ',' + data[0].lon;
+      // this.placeService.generatePlaceSuggestion(); chama uma nova função e faz um loop nos forecasts
     });
   }
 
@@ -122,10 +125,10 @@ export class AppComponent implements OnInit {
       data: {
           labels: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'],
           datasets: [{
-              label: 'temperatura °C',
-              borderColor: 'blue',
-              backgroundColor: 'transparent',
-              data: forecast.hourlyTemperature
+            label: 'temperatura °C',
+            borderColor: 'blue',
+            backgroundColor: 'transparent',
+            data: forecast.hourlyTemperature
           }]
       },
 
