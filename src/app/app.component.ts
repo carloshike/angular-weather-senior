@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
   defaultRegion = 'SC';
   defaultCity = 'Blumenau';
   favoriteAddressCookie: string;
+  cityCoordinates: string;
 
   constructor(
     private weatherService: WeatherService,
@@ -90,7 +91,15 @@ export class AppComponent implements OnInit {
           console.log(forecasts);
           this.createDailyForecastCharts(0);
           this.createWeekForecastCart(forecasts);
+          this.loadPlacesSuggestion(forecasts);
          });
+  }
+
+  loadPlacesSuggestion(forecasts) {
+    this.weatherService.getForecastLocationInfo(this.addressForm.value.cityInput, this.addressForm.value.region)
+    .subscribe((data: any[]) => {
+      this.cityCoordinates = data[0].lat + ',' + data[0].lon;
+    });
   }
 
   tabChange(event: any): void {
