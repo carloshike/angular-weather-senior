@@ -23,7 +23,7 @@ export class PlaceAdapter implements Adapter<Place> {
         item.title,
         item.icon,
         item.category.title,
-        item.vicinity.replace('<br/>', ', ')
+        item.vicinity.replace(/<br\/>/g, ', ')
       );
     }
   }
