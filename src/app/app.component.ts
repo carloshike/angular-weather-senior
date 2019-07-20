@@ -106,7 +106,6 @@ export class AppComponent implements OnInit {
   }
 
   loadPlacesSuggestion(forecasts) {
-    console.log(forecasts);
     this.weatherService.getForecastLocationInfo(this.addressForm.value.cityInput, this.addressForm.value.region)
     .subscribe((data: any[]) => {
       this.cityCoordinates = data[0].lat + ',' + data[0].lon;
@@ -115,14 +114,12 @@ export class AppComponent implements OnInit {
   }
 
   generatePlaceSuggestion(forecasts) {
-    console.log(1, forecasts);
     this.placeList = [];
     forecasts.forEach((forecast, index) => {
       this.placeService.generatePlaceSuggestion(forecast, this.cityCoordinates).subscribe((data: Array<Place>) => {
         this.placeList[index] = data;
         this.loading = false;
       });
-      console.log(2, this.placeList);
     });
   }
 
