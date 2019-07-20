@@ -147,8 +147,8 @@ export class AppComponent implements OnInit {
           labels: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'],
           datasets: [{
             label: 'temperatura °C',
+            backgroundColor: 'rgba(0, 0, 255, 0.35)',
             borderColor: 'blue',
-            backgroundColor: 'transparent',
             data: forecast.hourlyTemperature
           }]
       },
@@ -177,12 +177,10 @@ export class AppComponent implements OnInit {
           datasets: [{
             label: 'temperatura máxima °C',
             borderColor: 'red',
-            backgroundColor: 'transparent',
             data: maxTemp
           }, {
             label: 'temperatura mínima °C',
             borderColor: 'blue',
-            backgroundColor: 'transparent',
             data: minTemp
           }]
       },

@@ -16,9 +16,12 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule, MatInputModule, MatProgressSpinnerModule } from '@angular/material';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { CookieService } from 'ngx-cookie-service';
 import { DatePipe } from '@angular/common';
 import 'hammerjs';
+import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser'
+import { MyGestureConfig } from './config/my-gesture-config';
 
 @NgModule({
   declarations: [
@@ -39,14 +42,19 @@ import 'hammerjs';
     MatInputModule,
     MatProgressSpinnerModule,
     MatTabsModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule 
   ],
   providers: [
     WeatherService,
     AddressService,
     CookieService,
     PlaceService,
-    DatePipe
+    DatePipe,
+		{
+			provide: HAMMER_GESTURE_CONFIG,
+			useClass: MyGestureConfig
+		}       
   ],
   bootstrap: [AppComponent]
 })

@@ -18,9 +18,13 @@
       </mat-autocomplete>
     </mat-form-field>  
 
-    <a class="favorite" (click)="this.toggleFavorite()">
-      <i class="material-icons star-gold" *ngIf="this.favoriteAddressCookie">star</i>
-      <i class="material-icons" *ngIf="!this.favoriteAddressCookie">star_border</i>
+    <a class="favorite" (click)="this.toggleFavorite()" matTooltip="Pesquisa favorita" [matTooltipShowDelay]="500">
+      <div *ngIf="this.favoriteAddressCookie && this.favoriteAddressCookie === addressForm.value.region + '1' + addressForm.value.cityInput; else clearStar">
+        <i class="material-icons star-gold">star</i>
+      </div>
+      <ng-template #clearStar>
+        <i class="material-icons">star_border</i>
+      </ng-template>
     </a>
   </form>
 </div>
@@ -51,7 +55,7 @@
           </div>                  
         </ng-template>
         <div class="display-content">
-          <div class="half-width">
+          <div class="half-width margin-bottom">
             <span class="forecast-title">{{this.addressForm.value.cityInput}}, {{this.addressForm.value.region}}</span><br/>
             <span class="forecast-label">{{forecast.dayOfWeek}}<span *ngIf="forecast.dayOfWeek !== 'Sábado' && forecast.dayOfWeek !== 'Domingo'">-feira</span>, {{forecast.date}}</span><br/>
             <span class="forecast-label">{{forecast.weatherTranslated}}</span>
@@ -66,19 +70,28 @@
               </div>
             </div>
           </div>
-          <div class="half-width">
-            <div style="height: 200px">
+          <div class="half-width margin-bottom">
+            <div class="chart-style">
               <canvas id="forecastDailyChart{{i}}" #forecastDailyChart{{i}}></canvas>
             </div>
           </div>
           <div class="full-width" *ngIf="this.placeList && this.placeList[i]">
+
+            <div class="full-width">
+              <p class="forecast-label">Locais sugeridos:</p>
+            </div>
+
             <div class="half-width place" *ngFor="let placeList of this.placeList[i]">
-              <div class="left">
+              <div class="left" matTooltip="{{placeList.category}}" [matTooltipShowDelay]="500">
                   <img class="places-icon" src="{{placeList.icon}}">
               </div>
-              <div class="left">
-                  <span>{{placeList.title}}</span><br/>
-                  <span class="font-small">{{placeList.address}}</span>
+              <div class="left" matTooltip="{{placeList.title}} - {{placeList.address}}" [matTooltipShowDelay]="500">
+                  <div class="ellipsis">
+                    <span>{{placeList.title}}</span>
+                  </div>
+                  <div class="ellipsis">
+                    <span class="font-small">{{placeList.address}}</span>
+                  </div>
               </div>              
             </div>
           </div>
@@ -86,7 +99,13 @@
       </mat-tab>
     </mat-tab-group>
   </div>
-  <div style="height: 200px">
-    <canvas id="forecastWeekChart" #forecastWeekChart></canvas>
+  <div class="mat-tab-body-wrapper week-wrapper">
+    <div class="display-content chart-style">
+      <div class="full-width">
+        <span class="forecast-title">Resumo semanal</span>
+        <br/><br/><br/>
+      </div>      
+      <canvas id="forecastWeekChart" #forecastWeekChart></canvas>
+    </div>
   </div>
 </div>
