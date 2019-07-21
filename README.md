@@ -2,9 +2,13 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.1.
 
+AngularWeatherSenior provides an interface with the weather forecast of Brazilian cities within a week of the current day.
+
+You can see a demo here https://angular-weather-senior.carloshike.now.sh/
+
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run npm install to resolve all dependencies (might take a minute). Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Running unit tests
 
