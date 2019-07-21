@@ -16,7 +16,7 @@
           {{city.cidade}}
         </mat-option>
       </mat-autocomplete>
-    </mat-form-field>  
+    </mat-form-field>
 
     <a class="favorite" (click)="this.toggleFavorite()" matTooltip="Pesquisa favorita" [matTooltipShowDelay]="500">
       <div *ngIf="this.favoriteAddressCookie && this.favoriteAddressCookie === addressForm.value.region + '1' + addressForm.value.cityInput; else clearStar">
@@ -40,19 +40,19 @@
           <div class="tab-containner"> 
             <div>
               <span>{{forecast.dayOfWeek}}</span>
-            </div>  
+            </div>
             <div class="forecast-icon-wrapper">
               <img class="forecast-icon" src="http://cdn.worldweatheronline.net/images/weather/small/{{forecast.weatherCode}}_day_sm.png">
             </div>
             <div class="tab-temperature">
               <div>
                 <p>{{forecast.maxTemperature}}°</p>
-              </div>     
+              </div>
               <div>
                 <p>{{forecast.minTemperature}}°</p>
               </div>
             </div>
-          </div>                  
+          </div>
         </ng-template>
         <div class="display-content">
           <div class="half-width margin-bottom">
@@ -92,7 +92,7 @@
                   <div class="ellipsis">
                     <span class="font-small">{{placeList.address}}</span>
                   </div>
-              </div>              
+              </div>
             </div>
           </div>
        </div>
@@ -104,7 +104,7 @@
       <div class="full-width">
         <span class="forecast-title">Resumo semanal</span>
         <br/><br/><br/>
-      </div>      
+      </div>
       <canvas id="forecastWeekChart" #forecastWeekChart></canvas>
     </div>
   </div>

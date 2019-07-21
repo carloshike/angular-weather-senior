@@ -43,14 +43,7 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.weatherService.getforecastDefaults().subscribe(data => {
-      this.forecastDefaults = data;
-      this.onSelectCity(this.addressForm.get('cityInput').value);
-    });
-
-    this.addressService.getRegions().subscribe(data => {
-      this.regions = data;
-    });
+    this.loading = true;
 
     this.favoriteAddressCookie = this.cookieService.get('favoriteAddress');
 
@@ -58,10 +51,19 @@ export class AppComponent implements OnInit {
       this.defaultRegion = this.favoriteAddressCookie.split('1')[0];
       this.defaultCity = this.favoriteAddressCookie.split('1')[1];
     }
-
+    
     this.addressForm = this.fb.group({
       cityInput: this.defaultCity,
       region: this.defaultRegion
+    });
+  
+    this.weatherService.getforecastDefaults().subscribe(data => {
+      this.forecastDefaults = data;
+      this.onSelectCity(this.addressForm.get('cityInput').value);
+    });
+
+    this.addressService.getRegions().subscribe(data => {
+      this.regions = data;
     });
 
     this.addressForm.get('cityInput').valueChanges
