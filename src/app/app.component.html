@@ -56,7 +56,7 @@
         </ng-template>
         <div class="display-content">
           <div class="half-width margin-bottom">
-            <span class="forecast-title">{{this.addressForm.value.cityInput}}, {{this.addressForm.value.region}}</span><br/>
+            <span class="forecast-title">{{this.selectedCity}}, {{this.selectedRegion}}</span><br/>
             <span class="forecast-label">{{forecast.dayOfWeek}}<span *ngIf="forecast.dayOfWeek !== 'Sábado' && forecast.dayOfWeek !== 'Domingo'">-feira</span>, {{forecast.date}}</span><br/>
             <span class="forecast-label">{{forecast.weatherTranslated}}</span>
             <div>

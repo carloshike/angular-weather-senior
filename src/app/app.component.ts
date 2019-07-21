@@ -19,7 +19,8 @@ export class AppComponent implements OnInit {
   cities: Array<any>;
   forecasts: Array<Forecast>;
   addressForm: FormGroup;
-  selectedRegion: any;
+  selectedRegion: string;
+  selectedCity: string;
   showResult;
   dailyForecastCharts = [];
   weekForecastChart = [];
@@ -94,6 +95,8 @@ export class AppComponent implements OnInit {
 
   onSelectCity(city) {
     this.loading = true;
+    this.selectedRegion = this.addressForm.value.region;
+    this.selectedCity = this.addressForm.value.cityInput;
     this.weatherService.getWeekForecast(city, this.forecastDefaults)
         .subscribe(forecasts => {
           this.selectedTab = 0;

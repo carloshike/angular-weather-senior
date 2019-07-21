@@ -11,7 +11,7 @@ describe('workspace-project App', () => {
 
   it('should display default region', () => {
     page.navigateTo();
-    expect(page.getRegionText()).toEqual('Santa Catarina');
+    expect(page.getRegion().getText()).toEqual('Santa Catarina');
   });
 
   it('should display default city', () => {
@@ -24,16 +24,36 @@ describe('workspace-project App', () => {
 
   it('should start at todays tab', () => {
     const today = formatDate(new Date(), 'dd/MM/yyyy', 'en');
-    expect(page.getFirstTabDate()).toContain(today);
+    expect(page.getFirstTabDate().getText()).toContain(today);
   });
 
   it('should respect favorite place search', () => {
-    expect(page.emptyStar().isDisplayed()).toBe(true)
+    expect(page.getEmptyStar().isDisplayed()).toBe(true)
+    page.getCity().clear();
     page.getCity().sendKeys('Joinville');
-    page.emptyStar().click();
-    //expect(page.goldStar().isDisplayed()).toBe(true)
-    //page.navigateTo(); faz recarregar
-    
+    page.getFavoriteLink().click();
+    expect(page.getGoldStar().isDisplayed()).toBe(true);
+    page.navigateTo();
+    expect(page.getGoldStar().isDisplayed()).toBe(true);
+    expect(page.getCity().getAttribute('value')).toEqual('Joinville');
+  });
+
+  it('should show options by clicking state select', () => {
+    page.getRegion().click();
+    expect(page.getStateSelectOption().isDisplayed()).toBe(true);
+  });
+
+  it('should clear city field by choosing new state', () => {
+    page.getStateSelectOption().click();
+    expect(page.getCity().getText()).toEqual('');
+  });
+
+  it('should show new content by changing day tab', () => {
+    const tomorrow = formatDate(new Date().getTime() + (1000 * 60 * 60 * 24), 'dd/MM/yyyy', 'en');
+    page.getSecondTab().click();
+    expect(page.getSecondTabDate().isDisplayed()).toBe(true);
+    expect(page.getSecondTab().getAttribute('class')).toContain('mat-tab-label-active');
+    expect(page.getSecondTabDate().getText()).toContain(tomorrow);
   });
 
   afterEach(async () => {
