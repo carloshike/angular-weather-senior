@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
 export class WeatherService {
 
   baseUrl = 'https://api.worldweatheronline.com/premium/v1/';
-  apiKey = '07949ee74496483aa1003225191607';
+  apiKey = 'd4ab3965c1a94860af4184413191609';
   forecastJson = '../assets/weather.json';
 
   constructor(
